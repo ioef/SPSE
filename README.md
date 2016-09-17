@@ -1,5 +1,5 @@
-# SPSE
-
+# SPSE - SecurityTube Python Scripting Expert course
+ 
 This repository includes all of my personal answers for the The SecurityTube Python Scripting Expert (SPSE)
 course and Certification per module
 
