@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-
+import sys
 
 def traverseDir(dirname):
 
@@ -23,7 +23,11 @@ def traverseDir(dirname):
 
 def main():
 
-	traverseDir("/home/jeff/Downloads")
+	try:	
+		directory = sys.argv[1]
+		traverseDir(directory)
+	except:
+		print "Wrong Arguments! Please provide a path"
 
 
 if __name__ == "__main__":
