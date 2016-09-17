@@ -3,7 +3,8 @@
 This repository includes all of my personal answers for the The SecurityTube Python Scripting Expert (SPSE)
 course and Certification per module
 
-Module 1 - Python Basics, Data Structures, Classes, File Handling
+
+Module 1 - Python Basics, Data Structures, Classes, File Handling<br />
 Module 2 - Threading, Subprocesses, Signals and IPC, Client-Server Programming Basics
 Module 3 - Packet Sniffing with Raw Sockets, Packet Injection, Scapy Programming
 Module 4 - Fetching Web Pages, Parsing HTML, Coding a Screen Scraper, XML Parsing 
