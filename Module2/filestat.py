@@ -27,7 +27,6 @@ def fileinfo(name):
 	#retrieve, convert and print local last modification and access time
 	mtimelocal = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(info.st_mtime))
 	atimelocal = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(info.st_atime))
-
 	print("Last Modified : %s" %mtimelocal)
 	print("Last Accessed : %s" %atimelocal)
 	
