@@ -35,7 +35,8 @@ def main():
 	if len(sys.argv) > 1  and sys.argv[1] == int:
 		timer = sys.argv[1]		
 	
-	#start the SIGALRM timer in order to terminate the server automatically 
+	#start the SIGALRM timer in order to terminate the server automatically after N seconds 
+	#as stored in the timer variable
 	signal.signal(signal.SIGALRM, alarm_handler)
 	signal.alarm(timer)
 
