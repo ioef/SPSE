@@ -13,7 +13,7 @@ bind_ip   = "0.0.0.0"
 bind_port = 9999
 
 tcpSocket.bind((bind_ip,bind_port))
-tcpSocket.listen(2)
+tcpSocket.listen(1)
 
 print "Waiting for Client..."
 
