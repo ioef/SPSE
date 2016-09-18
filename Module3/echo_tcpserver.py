@@ -6,6 +6,9 @@ import socket
 #create a TCP socket
 tcpSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
+#The socket shall be reusable, in order to be immediately available for reuse
+tcpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1) 
+
 bind_ip   = "0.0.0.0" 
 bind_port = 9999
 
