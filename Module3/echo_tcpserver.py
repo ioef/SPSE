@@ -16,17 +16,17 @@ tcpSocket.bind((bind_ip,bind_port))
 tcpSocket.listen(1)
 
 print "Waiting for Client..."
-
-
+	
 connection, (ip, sock) = tcpSocket.accept()
+	
+while True:
+	print "Received connection from Client with IP: %s:%d" %(ip,sock)
 
-print "Received connection from Client with IP: %s:%d" %(ip,sock)
+	a = connection.recv(1024)
+	print ("Received from the Client the message: %s" %a)
 
-a = connection.recv(1024)
-print ("Received from the Client the message: %s" %a)
+	clientEcho = "ECHO: "+ a
 
-clientEcho = "ECHO: "+ a
-
-connection.send(clientEcho)
+	connection.send(clientEcho)
 
 connection.close()
