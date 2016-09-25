@@ -120,14 +120,19 @@ def main():
 
 	pkt = "dummy"	
 	while pkt:
-		pkt = rawSocket.recvfrom(2048)
-		destMAC, sourceMAC, ethType = parseEtherHeader(pkt)
-		sourceIP, destIP = parseIPHeader(pkt)
-		sourcePort, destPort = parseTCPHeader(pkt) 
+		try:
+			pkt = rawSocket.recvfrom(2048)
+			destMAC, sourceMAC, ethType = parseEtherHeader(pkt)
+			sourceIP, destIP = parseIPHeader(pkt)
+			sourcePort, destPort = parseTCPHeader(pkt) 
 
-		print "[+] Source MAC:%s | Destination MAC:%s | Eth Type:%s" %(sourceMAC, destMAC, ethType)
-		print "[+] Source IP  %s:%s Destination IP:port %s:%s" %(sourceIP, sourcePort, destIP, destPort)
-		print	
+			print "[+] Source MAC:%s | Destination MAC:%s | Eth Type:%s" %(sourceMAC, destMAC, ethType)
+			print "[+] Source IP  %s:%s Destination IP:port %s:%s" %(sourceIP, sourcePort, destIP, destPort)
+			print
+
+		except KeyboardInterrupt:
+			print "Terminating sniffer"
+			sys.exit(0)	
 
 
 if __name__ == "__main__":
