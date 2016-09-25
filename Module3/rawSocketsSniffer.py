@@ -99,6 +99,16 @@ def parseTCPHeader(raw_packets):
 	return  sourcePort, destPort
 
 
+def parseData(raw_packets,sport,dport):
+
+	data = raw_packets[0][54:]
+
+	if sport == 80 or dport == 80:
+		print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+        	print "data: {0}" .format(data)
+        	print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+
+
 def createSocket():
 	'''
 	this function creates a raw socket
@@ -128,6 +138,7 @@ def main():
 
 			print "[+] Source MAC:%s | Destination MAC:%s | Eth Type:%s" %(sourceMAC, destMAC, ethType)
 			print "[+] Source IP  %s:%s Destination IP:port %s:%s" %(sourceIP, sourcePort, destIP, destPort)
+			parseData(pkt,sourcePort,destPort)
 			print
 
 		except KeyboardInterrupt:
