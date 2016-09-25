@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#created by Dr_Ciphers
-
 import socket
 import sys
 import struct
