@@ -6,6 +6,7 @@ import socket
 import sys
 import struct
 import binascii
+from optparse import OptionParser
 
 
 
@@ -102,11 +103,11 @@ def parseTCPHeader(raw_packets):
 def parseData(raw_packets,sport,dport):
 
 	data = raw_packets[0][54:]
-
 	if sport == 80 or dport == 80:
-		print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
-        	print "data: {0}" .format(data)
-        	print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+		print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+		print "DataStream:" 
+		print "{0}".format(hexdump(data))
+		print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 
 
 def createSocket():
@@ -124,8 +125,27 @@ def createSocket():
        
 
 
-def main():
+def hexdump(src, length=16):
+	result=[]
+	digits = 4 if isinstance(src,unicode) else 2
 	
+	for i in xrange(0, len(src), length):
+		s = src[i:i+length]
+		hexa = b' '.join(["%0*X"%(digits, ord(x)) for x in s])
+		text = b''.join([x if 0x20 <= ord(x) < 0x7F else b'.' for x in s])
+		result.append( b"%04X  %-*s  %s" %(i, length*(digits + 1), hexa, text))
+
+	return (b'\n'.join(result))
+
+def main():
+
+	parser = OptionParser()
+	parser.add_option("--verbose", action="store_true", dest="verbose",  default=False, help="enable verbose output")
+	(options, args) = parser.parse_args()
+	
+	if options.verbose: verbose = True
+	else: verbose = False	
+
 	rawSocket = createSocket()
 
 	pkt = "dummy"	
@@ -138,7 +158,9 @@ def main():
 
 			print "[+] Source MAC:%s | Destination MAC:%s | Eth Type:%s" %(sourceMAC, destMAC, ethType)
 			print "[+] Source IP  %s:%s Destination IP:port %s:%s" %(sourceIP, sourcePort, destIP, destPort)
-			parseData(pkt,sourcePort,destPort)
+			if verbose == True:
+				parseData(pkt,sourcePort,destPort)
+		
 			print
 
 		except KeyboardInterrupt:
