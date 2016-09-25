@@ -44,3 +44,8 @@ destPort = tcp_hdr[1]
 print 'Source IP:Port %s:%s' %(sourceIP, sourcePort)
 print 'Destination IP:Port %s:%s' %(destIP, destPort)
 
+data = pkt[0][54:]
+
+data = binascii.hexlify(data)
+
+print data
