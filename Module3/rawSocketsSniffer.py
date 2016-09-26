@@ -78,9 +78,9 @@ def parseTCPHeader(raw_packets):
               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
               |                    Acknowledgment Number                    |
               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-              |  Data |           |U|A|P|R|S|F|                             |
-              | Offset| Reserved  |R|C|S|S|Y|I|            Window           |
-              |       |           |G|K|H|T|N|N|                             |
+              |  Data | Re  | C|E|U|A|P|R|S|F||                             |
+              | Offset| se  | W|C|R|C|S|S|Y|I||          Window             |
+              |       | rved| R|E|G|K|H|T|N|N||                             |
               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
               |           Checksum            |         Urgent Pointer      |
               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -91,14 +91,50 @@ def parseTCPHeader(raw_packets):
 	'''
 
 	tcpHeader = raw_packets[0][34:54]
-	#2 unsigned INTS + 16 Bytes
-	tcp_hdr = struct.unpack("!HH16s",tcpHeader)
+	#2 unsigned short integters (2 bytes each),
+	#2 long ints (4 bytes each), 2 unsigned chars (1 byte each)
+	#3 unsinged short integers (2 bytes each)
+	tcp_hdr = struct.unpack("!HHLLBBHHH",tcpHeader)
 	
 	sourcePort = tcp_hdr[0]
 	destPort = tcp_hdr[1]
- 
-	return  sourcePort, destPort
+	sendSeqNumber = tcp_hdr[2]
+	ackNumber = tcp_hdr[3]
+	off_reserved = tcp_hdr[4]
+	tcp_flags = tcp_hdr[5] 
 
+	return  sourcePort, destPort, sendSeqNumber, ackNumber, tcp_flags
+
+
+def flagsChecks(flags):
+	FIN = 0x01
+	SYN = 0x02
+	RST = 0x04
+	PSH = 0x08
+	ACK = 0x10
+	URG = 0x20
+	ECE = 0x40
+	CWR = 0x80
+
+	if flags & FIN:
+		return "FIN"
+	elif flags & SYN:
+		return "SYN"
+	elif flags & RST:
+		return "RST"
+	elif flags & PSH:
+		return "PSH"
+	elif flags & ACK:
+		return "ACK"
+	elif flags & URG:
+		return "URG"
+	elif flags & ECE:
+		return "ECE"
+	elif flags & CWR:
+		return "CWR"
+	else:
+		return "Unknown FLAG!"
+	
 
 def parseData(raw_packets,sport,dport):
 
@@ -137,8 +173,9 @@ def hexdump(src, length=16):
 
 	return (b'\n'.join(result))
 
-def main():
 
+def main():
+	
 	parser = OptionParser()
 	parser.add_option("--verbose", action="store_true", dest="verbose",  default=False, help="enable verbose output")
 	(options, args) = parser.parse_args()
@@ -154,10 +191,12 @@ def main():
 			pkt = rawSocket.recvfrom(2048)
 			destMAC, sourceMAC, ethType = parseEtherHeader(pkt)
 			sourceIP, destIP = parseIPHeader(pkt)
-			sourcePort, destPort = parseTCPHeader(pkt) 
+			sourcePort, destPort,seqNum, ackNum, flags = parseTCPHeader(pkt) 
 
 			print "[+] Source MAC:%s | Destination MAC:%s | Eth Type:%s" %(sourceMAC, destMAC, ethType)
-			print "[+] Source IP  %s:%s Destination IP:port %s:%s" %(sourceIP, sourcePort, destIP, destPort)
+			print "[+] Source IP  %s:%s Destination IP %s:%s" %(sourceIP, sourcePort, destIP, destPort)
+			print "[+] Sequence Number:%s Ackknowledgement Num:%s Flags:%s" %(seqNum, ackNum, flagsChecks(flags))
+
 			if verbose == True:
 				parseData(pkt,sourcePort,destPort)
 		
