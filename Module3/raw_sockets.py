@@ -6,7 +6,7 @@ import binascii
 
 
 '''
-PF_PACKET: Packet Sockets are used to receive and send raw packats at the device driver (OSI L2) level.
+PF_PACKET: Packet Sockets are used to receive and send raw packets at the device driver (OSI L2) level.
 SOCK_RAW: Packets including the Data Link Level header 
 0x0800: Shows the code for the protocol of interest which is the IP Protocol
 '''
