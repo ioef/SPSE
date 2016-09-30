@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+#created by Dr Ciphers
+#Before running this program the wlan0 card
+#shall be set to monitor mode with a command like 
+#sudo airmong-ng start wlan0
+#Here we assume that the mon0 i/f is used
 
 from scapy.all import *
 
