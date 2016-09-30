@@ -1,18 +1,32 @@
 #!/usr/bin/env python
 
+#created by Dr_Ciphers
+
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 
-def prnpacket(packet):
-	for i in range(len(packet)):
-		if packet[i].haslayer(Raw):
-			s = packet[i].load.split('\r\n')
+import signal
+
+
+def prnpacket(packets):
+	for packet in packets:
+		#check if the packet has Payload
+		if packet.haslayer(Raw):
+		
+			rawData= str(packet.getlayer(Raw))
 	
-			for i in range(len(s)):
-				print s[i]
+			if rawData.startswith("GET"):
+				print rawData								
+			elif rawData.startswith("POST"):
+				print rawData
+
+def ctrlc_handler(signum,frame):
+	print "Terminating Program..."
+	sys.exit(0)
 
 
-packets = sniff(iface="eth1", filter="tcp port 80", count=30)
-
-prnpacket(packets)
-
+					
+signal.signal(signal.SIGINT, ctrlc_handler)
+packets = sniff(iface="eth1", filter="tcp port 80",prn=prnpacket)
 
