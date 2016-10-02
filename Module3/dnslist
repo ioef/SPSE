@@ -1,0 +1,5 @@
+#reverse DNS resolvers
+#facebook is resolved to google and vice-versa
+216.58.212.36        *.facebook.com
+69.171.230.68        *.google.com
+
