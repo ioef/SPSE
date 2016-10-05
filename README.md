@@ -1,6 +1,6 @@
 # SPSE - SecurityTube Python Scripting Expert course
 
-![SecurityTube: Python Scripting Expert Logo](.logo.png)
+![SecurityTube: Python Scripting Expert Logo](logo.png)
 
 
 This repository includes all of my personal answers for the The SecurityTube Python Scripting Expert (SPSE)
