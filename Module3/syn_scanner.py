@@ -8,8 +8,12 @@ SYN = 0x02
 RST = 0x04
 
 
-targetIP = "192.168.2.3"
-targetPort = int(sys.argv[1])
+if len(sys.argv[0:]) != 3:
+	print "usage: ./syn_scanner ip_address port_number"
+	sys.exit(-1)
+
+targetIP = sys.argv[1]
+targetPort = int(sys.argv[2])
 
 synPacket = IP(dst=targetIP)/TCP(dport=targetPort,flags="S")
 
