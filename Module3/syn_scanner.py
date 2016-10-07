@@ -3,29 +3,49 @@
 from scapy.all import *
 import sys
 
-ACK = 0x10
-SYN = 0x02
-RST = 0x04
+
+def checkAndPrint(synPacket):
+	ACK = 0x10
+	SYN = 0x02
+	RST = 0x04
+
+	response = sr1(synPacket,verbose=0,timeout=0.1)
+	if response:
+		if response[TCP].flags & ACK:
+			if response[TCP].flags & SYN:
+				openPorts.append(response[TCP].sport)
 
 
 if len(sys.argv[0:]) != 3:
-	print "usage: ./syn_scanner ip_address port_number"
+	print ("usage: ./syn_scanner ip_address port_number")
 	sys.exit(-1)
 
 targetIP = sys.argv[1]
-targetPort = int(sys.argv[2])
 
-synPacket = IP(dst=targetIP)/TCP(dport=targetPort,flags="S")
+allscan = False
+if sys.argv[2] == "all":
+	allscan = True
+else:
+	targetPort = int(sys.argv[2])
 
+openPorts=[]
 
-response = sr1(synPacket,verbose=0)
+if allscan:
+	for targPort in xrange(1,1024):
 
-if response[TCP].flags & ACK :
-	if response[TCP].flags & SYN:
-		print "Received SYN Response! Port probably open!"
-	elif response[TCP].flags & RST:
-		print "Received RST Response! The Port is closed"
-	else:
-		print "Port is either closed or filtered!"
+		percCalc = targPort/float(1024)*100
+		sys.stdout.write("\r" +"Scanning completed: " +str(percCalc)+"%")
+		sys.stdout.flush()
+		synPacket = IP(dst=targetIP)/TCP(dport=targPort,flags="S")
+		checkAndPrint(synPacket)
+else:
+	synPacket = IP(dst=targetIP)/TCP(dport=targetPort,flags="S")
+	checkAndPrint(synPacket)
 
+	
+print ("Results")
+print ("============================================")
+
+print ("Found Open Ports:")
+print '\n'.join([str(x) for x in openPorts])
 
