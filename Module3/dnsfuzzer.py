@@ -23,4 +23,4 @@ print "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 
 while True:
     packet=IP(dst=destIP)/UDP()/fuzz(DNS())
-    sr(packet, iface=sys.argv[2], verbose = 1, inter=1, timeout=1)
+    sr(packet, iface=sys.argv[2], verbose = 1, inter=0.2, timeout=1)
