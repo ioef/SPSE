@@ -9,13 +9,29 @@ from bs4 import BeautifulSoup
 
 def hilite(string, color, bold):
 	attr = []
-	if color == "yellow":
+
+	if color == "red":
+		attr.append('31')
+	elif color == "green":
+		attr.append('32')
+	elif color == "yellow":
 		attr.append('33')
+	elif color == "blue":
+		attr.append('34')
+	elif color == "purple":
+		attr.append('35')
+	elif color == "cyan":
+		attr.append('36')
+	elif color == "white":
+		attr.append('37')
         else: 
-		#color == "green":
-        	attr.append('32')
+		#color == "none":
+        	attr.append('0')
     	if bold:
-        	attr.append('1')
+        	attr.append('1')	
+
+	#return a form that is used in linux bash shell for the font and color settings
+	#\xb1b[color;fontsizem;text\x1b[0m
 	return '\x1b[%sm%s\x1b[0m' % (';'.join(attr), string)
 
 
@@ -33,7 +49,7 @@ def main():
 		print 
 		for record in links:
 			if record:
-				print hilite("%s"% (record.string), "green", True)
+				print hilite("%s"% (record.string), "cyan", True)
 				print hilite("%s"% (record['href']), "yellow", False)
 				print
 
