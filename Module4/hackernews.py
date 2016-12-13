@@ -5,6 +5,18 @@
 import urllib
 from bs4 import BeautifulSoup
 
+#http://stackoverflow.com/questions/2330245/python-change-text-color-in-shell
+
+def hilite(string, color, bold):
+	attr = []
+	if color == "yellow":
+		attr.append('33')
+        else: 
+		#color == "green":
+        	attr.append('32')
+    	if bold:
+        	attr.append('1')
+	return '\x1b[%sm%s\x1b[0m' % (';'.join(attr), string)
 
 
 def main():
@@ -21,8 +33,8 @@ def main():
 		print 
 		for record in links:
 			if record:
-				print u"{0}".format(record.string)
-				print record['href']
+				print hilite("%s"% (record.string), "green", True)
+				print hilite("%s"% (record['href']), "yellow", False)
 				print
 
 if __name__ == "__main__":
