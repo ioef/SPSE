@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-#terminal based hackernews 
+"""  
+	Module 4: Attacking Web Applications
+	Excercise - Beautiful Soup based HTML Parsing, Terminal based hackernews
+"""
 
 import urllib
 from bs4 import BeautifulSoup
