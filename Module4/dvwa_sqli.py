@@ -10,19 +10,31 @@ import mechanize
 from bs4 import BeautifulSoup
 
 
+#Define Global Variables and Objects
+browser = mechanize.Browser()
+#override the check for robots.txt
+browser.set_handle_robots(False)
+
+#Follows refresh 0 but not hangs on refresh > 0
+#alternatively you may want to switch off the refreshing with browser.set_handle_refresh(False)
+browser.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+
+#set the browser headers
+browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.3) Gecko/20091020 Ubuntu/9.10 Firefox/3.6.0')]
+
 
 def dvwa_login(url, form_number, user, passwd):
-	pass
-
-
+	browser.open(url)
+	
+	print(browser.response().read())
+	
 def dvwa_enum():
-	pass
+	pass	
 def dvwa_sqli():
 	pass
 
+
 def main():
-
-
 	if len(sys.argv) !=2:
 		print "Syntax: ./dvwa_sqli.py target_IP"
 		sys.exit(1)
@@ -37,14 +49,14 @@ def main():
 		print "Exiting...."
 		sys.exit(1)
 
- 
 	#define the urls
-	dvwai_login = 'http://' + ip_address + '/dvwa/login.php'
+	dvwa_login_url = 'http://' + ip_address + '/dvwa/login.php'
 	security_setting_url = 'http://' + ip_address +'/dvwa/security.php'
 	sqli_url = 'http://' + ip_address + '/dvwa/vulnerabilities/sqli/'
 	sqli_blind_url = 'http://' + ip_address +'/dvwa/vulnerabilities/sqli_blind/'
 
-	print sqli_url
+
+	dvwa_login(dvwa_login_url, 0, "admin", "password")
 
 
 
