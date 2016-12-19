@@ -26,16 +26,14 @@ browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; 
 def dvwa_login(url, form_number, user, passwd):
 	browser.open(url)
 	browser.select_form(nr=0)
-	
+
+	#set the credentials and submit the data to the authentication form	
 	browser.form['username'] = user
 	browser.form['password'] = passwd
 	browser.submit()
 
-	forms_show()	
-	links_show()	
+	links_enum()	
 
-def dvwa_enum():
-	pass	
 def dvwa_sqli():
 	pass
 
@@ -43,9 +41,12 @@ def forms_show():
 	for form in browser.forms():
 		print form
 
-def links_show():
+def links_enum():
+	#page links enumeration function
 	for link in browser.links():
-		print link.url + link.text
+		if "SQL Injection" in link.text or "DVWA Security" == link.text :
+			print link.base_url.rstrip('index.php') + link.url.rstrip('.')
+		
 def main():
 	if len(sys.argv) !=2:
 		print "Syntax: ./dvwa_sqli.py target_IP"
@@ -67,9 +68,14 @@ def main():
 	sqli_url = 'http://' + ip_address + '/dvwa/vulnerabilities/sqli/'
 	sqli_blind_url = 'http://' + ip_address +'/dvwa/vulnerabilities/sqli_blind/'
 
-
+	#login to the DVWA page
 	dvwa_login(dvwa_login_url, 0, "admin", "password")
 
+	#lower the security settings
+
+	#perform SQLI Attacks
+
+	#Perform SQLI Blind Attacks
 
 
 if __name__ =="__main__":
