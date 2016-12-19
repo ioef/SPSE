@@ -45,7 +45,7 @@ def forms_show():
 
 def links_show():
 	for link in browser.links():
-		print link
+		print link.url + link.text
 def main():
 	if len(sys.argv) !=2:
 		print "Syntax: ./dvwa_sqli.py target_IP"
