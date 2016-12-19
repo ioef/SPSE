@@ -25,15 +25,27 @@ browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; 
 
 def dvwa_login(url, form_number, user, passwd):
 	browser.open(url)
+	browser.select_form(nr=0)
 	
-	print(browser.response().read())
-	
+	browser.form['username'] = user
+	browser.form['password'] = passwd
+	browser.submit()
+
+	forms_show()	
+	links_show()	
+
 def dvwa_enum():
 	pass	
 def dvwa_sqli():
 	pass
 
+def forms_show():
+	for form in browser.forms():
+		print form
 
+def links_show():
+	for link in browser.links():
+		print link
 def main():
 	if len(sys.argv) !=2:
 		print "Syntax: ./dvwa_sqli.py target_IP"
@@ -61,4 +73,4 @@ def main():
 
 
 if __name__ =="__main__":
-	main()	
+	main()
