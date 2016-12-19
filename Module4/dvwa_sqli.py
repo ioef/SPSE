@@ -56,7 +56,6 @@ def dvwa_sqli(url):
 	for sqli in sqlInjectionList:
 	
 		browser.open(url)
-		
 		#select the first form
 		browser.select_form(nr=0)
 
@@ -64,15 +63,16 @@ def dvwa_sqli(url):
 		browser.form['id'] = sqli		
 		
 		response=browser.submit()
-		
 		htmlresult = response.read()
-		
-		bs = BeautifulSoup(htmlresult, 'lxml')
-		IDs = bs.find_all('pre')
-		
-		for idSql in IDs:
-			print idSql
 	
+		#parse the results of the SQL Query with the BeatifulSoup	
+		bs = BeautifulSoup(htmlresult, 'lxml')
+		dbResults = bs.find_all('pre')
+		
+		for record in dbResults:
+			print record
+		print ('\n')
+
 def forms_show():
 	for form in browser.forms():
 		print form
