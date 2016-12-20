@@ -68,7 +68,7 @@ def dvwa_sqli(url):
 		#parse the results of the SQL Query with the BeatifulSoup	
 		bs = BeautifulSoup(htmlresult, 'lxml')
 		dbResults = bs.find_all('pre')
-		
+	
 		for record in dbResults:
 			print record
 		print ('\n')
