@@ -18,7 +18,7 @@ def main():
 
 	
 	serverIPList = ftpIPs()
-
+	
 	for serverIP in serverIPList:
 		clientBanner = '\n[+] Attempting to connect to ftp server with IP: '  + serverIP + '\n'
 		sys.stdout.write(clientBanner)
