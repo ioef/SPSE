@@ -11,7 +11,7 @@ from optparse import OptionParser
 
 
 def urlOpen():
-
+	pass
 
 
 def main():
@@ -19,6 +19,6 @@ def main():
 
 
 
-if __name_ == "__main__":
+if __name__ == "__main__":
 	main()
 
