@@ -10,7 +10,14 @@ from optparse import OptionParser
 
 
 
-def urlOpen():
+def urlOpen(url):
+	br.set_cookiejar(cookiejar)	
+	br.open(url)	
+	fillCreds()
+	br.submit()
+
+def fillCreds():
+	#Function that fills credentials
 	pass
 
 
@@ -41,7 +48,7 @@ def main():
 		sys.exit(1)
 
 	#Create a CookieJar	
-	cookiejar = mech.CookieJar()
+	cookiejar = mechanize.CookieJar()
 
 if __name__ == "__main__":
 	main()
