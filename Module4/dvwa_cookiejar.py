@@ -11,7 +11,6 @@ from optparse import OptionParser
 
 
 def urlOpen():
-	br.
 	pass
 
 
