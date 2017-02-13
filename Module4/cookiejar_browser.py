@@ -15,6 +15,7 @@ def urlOpen(url,username, password, submitted):
 	#if it is not reuse the cookie previously created	
 	if submitted == True:
 		br = mechanize.Browser()
+		br.set_handle_robots(False)
 		br.set_cookiejar(cookiejar)	
 		br.open(url)
 
@@ -26,6 +27,7 @@ def urlOpen(url,username, password, submitted):
 		br.submit()
 	else:
 		br2 = mechanize.Browser()
+		br.set_handle_robots(False)
 		br2.set_cookiejar(cookiejar)
 		br2.open(url)
 		
