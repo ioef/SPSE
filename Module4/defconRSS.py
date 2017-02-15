@@ -10,7 +10,7 @@ def main():
 	#open the page and store it to the xmlpage variable
 	xmlpage = urllib.urlopen('https://www.defcon.org/defconrss.xml')
 	
-	#parse the xmlpage with the BeautifulSoup parser
+	#parse the xmlpage with the BeautifulSoup xml parser
 	bs = BeautifulSoup(xmlpage,"xml")
 
 	for item in bs.find_all('item'):
