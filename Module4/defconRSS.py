@@ -5,14 +5,20 @@ from bs4 import BeautifulSoup
 
 
 
-xmlpage = urllib.urlopen('https://www.defcon.org/defconrss.xml')
+def main():
 
-bs = BeautifulSoup(xmlpage,"xml")
+	#open the page and store it to the xmlpage variable
+	xmlpage = urllib.urlopen('https://www.defcon.org/defconrss.xml')
+	
+	#parse the xmlpage with the BeautifulSoup parser
+	bs = BeautifulSoup(xmlpage,"xml")
+
+	for item in bs.find_all('item'):
+		#print the title of the item
+		print item.title.string	
+		#print only the link's text
+		print item.link.text
 
 
-for item in bs.find_all('item'):
-	#print the title of the item
-	print item.title.string
-	#print only the link's text
-	print item.link.text
-
+if __name__ =="__main__":
+	main()
