@@ -3,6 +3,7 @@ import urllib2
 from bs4 import BeautifulSoup
 from optparse import OptionParser
 
+#function to validate the proxy
 def validate_proxy(proxy_url):
     
     if proxy_url.startswith('https') or proxy_url.startswith('http'):
@@ -16,9 +17,10 @@ def validate_proxy(proxy_url):
         return False
 
 
-
+#main
 def main():
    
+    #parser for the arguments and options
     parser = OptionParser(usage="usage: %prog url [options]")
     parser.add_option('-p','--proxy',dest='proxy', help='Proxy server')
 
@@ -37,6 +39,7 @@ def main():
         parser.error("No proxy provided")
         sys.exit(1)
 
+    #validate the proxy provided by the user
     if validate_proxy(proxy):
         proxy = urllib2.ProxyHandler({'http':proxy})
         opener = urllib2.build_opener(proxy)
@@ -45,12 +48,15 @@ def main():
         print("No valid proxy url form provided (e.g. proxy:port or localhost:8080 )")
         sys.exit(1)  
 
-
+    #open the url provided and save the result in the response object
     response = urllib2.urlopen(site)
+    #read the response object for the page contents
     html = response.read()
 
+    #parse the html site with the BeatifulSoup lxml parser
     bs = BeautifulSoup(html, 'lxml')
 
+    #search for the page links
     a_href = bs.find_all('a')
 
     for link in a_href:
