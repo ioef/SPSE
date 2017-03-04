@@ -46,9 +46,6 @@ def main():
         sys.exit(1)  
 
 
-    site = 'http://www.sectools.org'
-
-
     response = urllib2.urlopen(site)
     html = response.read()
 
