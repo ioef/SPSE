@@ -41,7 +41,7 @@ def main():
     
     br = mechanize.Browser()
     br.set_handle_robots(False)
-    print "Using proxy: %s" %proxy
+    print "\nUsing proxy: %s" %proxy
 
     if validate_proxy(proxy):
         br.set_proxies({"http": proxy})
@@ -53,10 +53,11 @@ def main():
     print "Now Openining URL: %s" % url
     br.open(url)
     
-    print "Printing...."
+    print "Printing all the links found in the provided page"
+    print "================================================="
 
     for link in br.links():
-         print link.text + link.url
+         print link.text+": " + link.url
 
 
 if __name__ == "__main__":
