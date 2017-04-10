@@ -50,7 +50,13 @@ class crawlEngine(threading.Thread):
           while True:
               pass
 
-
+      def openurl(self):
+          req = urllib2.Request(self.base_url)
+          req.add_header('User-agent','Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Firefox/23.0')
+          resp = urllib2.urlopen(req)
+          html = resp.read()
+        
+          return html  
 
       def get_links(self,html):
    
@@ -79,11 +85,9 @@ def main():
     crawler = crawlEngine(1, url, 0, 0)
     
     linkList = []
-    req = urllib2.Request(url)
-    req.add_header('User-agent','Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Firefox/23.0')
-    resp = urllib2.urlopen(req)
-    html = resp.read()
-    linkList = crawler. get_links(html) 
+    
+    html = crawler.openurl()
+    linkList = crawler.get_links(html) 
     
     for link in linkList:
         print link
