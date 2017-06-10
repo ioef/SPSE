@@ -20,20 +20,7 @@ from optparse import OptionParser
 from bs4 import BeautifulSoup
 import urllib2
 import sys
-#import MySQLdb
-
-
-
-#create the class that will handle the MySQL Object
-#This class handles the mysql connection
-class MySQLDB:
-    #Class that is responsible for the connection data of the mysql
-    def __init__(self, hostname, port, db, user, passwd):
-        self.hostname = hostname
-        self.port     = port
-        self.db       = db
-        self.user     = user
-        self.passwd   = passwd
+import MySQLdb
 
 
 class crawlEngine(threading.Thread):
@@ -47,6 +34,14 @@ class crawlEngine(threading.Thread):
           self.max_depth       = max_depth
           self.mysqlConnection = mysqlConnection
           self.lock            = lock
+
+          #MySQL data
+          self.dbhostname = 'localhost'
+          self.dbport     =  3306
+          self.db         = 'spsedb'
+          self.dbuser     = 'test'
+          self.dbpasswd   = 'password'
+
 
       def run(self):
           while True:
@@ -110,18 +105,45 @@ class crawlEngine(threading.Thread):
           
           links = []
           for link in bs.find_all('a', href=True):
-              if not link['href'].startswith('#'):
+              linkurl = link['href']
+              #exclude scripts, .asp, .php and .jsp pages
+              if ((linkurl.find(".php") == -1) or (link.find(".jsp") == -1) or (link.find(".asp") == -1)):
+                  #exclude local anchors
+                  if not linkurl.startswith('#'):
                   #if it is a relative path convert it to absolute
                   #and append in the links list
-                  if link['href'][0] == '/': 
-                      links.append(self.base_url + link['href'])                    
-                 
-                  #if it starts with http or https append the absolute
-                  #path to the list. Ignore everything else like "javascript void(0) etc." 
-                  if link['href'].startswith('http'):
-                      links.append(link['href'])
-     
+                      if linkurl[0] == '/': 
+                          links.append(self.base_url + linkurl)                    
+                      #if it starts with http or https append the absolute
+                      #path to the list. Ignore everything else like "javascript void(0) etc." 
+                      if linkurl.startswith('http'):
+                          links.append(linkurl)
           return links
+
+
+      def addtoDB(self, url, depth):
+          # Open database connection
+          db = MySQLdb.connect(host=self.dbhostname, port = self.dbport,
+                                    user=self.dbuser,
+                                    passwd=self.dbpassword)
+
+          # prepare a cursor object using cursor() method
+          cursor = db.cursor()
+          
+          add_url = ("INSERT INTO websites "
+                     "(url, depth)"
+                     "VALUES (%s, %s)")
+
+
+          cursor.execute(add_url)
+
+          # Make sure data is committed to the database
+          db.commit()
+
+          #terminate the cursor object and close the db connection
+          cursor.close()
+          db.close()
+
 
 
 
