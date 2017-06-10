@@ -8,9 +8,10 @@
 #sudo mysql
 #mysql> SHOW DATABASES;
 #mysql> CREATE DATABASE spsedb;
-#mysql> CREATE USER 'test'@'localhost' IDENTIFIED BY 'simplepass';
+#mysql> CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'simplepassword';
 #mysql> USE spsedb;
 #mysql> GRANT ALL ON spsedb.* TO 'test'@'localhost';
+#mysql> CREATE TABLE websites(url char(100), depth int);
 #mysql> quit;
 
 
@@ -39,8 +40,8 @@ class crawlEngine(threading.Thread):
           self.dbhostname = 'localhost'
           self.dbport     =  3306
           self.db         = 'spsedb'
-          self.dbuser     = 'test'
-          self.dbpasswd   = 'password'
+          self.dbuser     = 'testuser'
+          self.dbpasswd   = 'simplepassword'
 
 
       def run(self):
@@ -66,6 +67,7 @@ class crawlEngine(threading.Thread):
                       continue
 
 
+              self.addtoDB(url, self.depth)
               self.queue.task_done()
 
       def openurl(self, url):
@@ -124,18 +126,17 @@ class crawlEngine(threading.Thread):
       def addtoDB(self, url, depth):
           # Open database connection
           db = MySQLdb.connect(host=self.dbhostname, port = self.dbport,
-                                    user=self.dbuser,
-                                    passwd=self.dbpassword)
+                               db = self.db,
+                               user=self.dbuser,
+                               passwd=self.dbpasswd)
 
           # prepare a cursor object using cursor() method
           cursor = db.cursor()
           
-          add_url = ("INSERT INTO websites "
-                     "(url, depth)"
-                     "VALUES (%s, %s)")
+          add_url = ("INSERT INTO websites (url, depth) VALUES (%s, %s)")
+          data = (url, int(depth))
 
-
-          cursor.execute(add_url)
+          cursor.execute(add_url, data)
 
           # Make sure data is committed to the database
           db.commit()
