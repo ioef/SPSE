@@ -1,4 +1,4 @@
-#!usr/bin/env python
+#!/usr/bin/env python
 '''
 This script is part of the scripts developed which test a Web Application against a number 
 of vulnerabilities. It is a python implementation for the OWASP Top 10. 
@@ -24,7 +24,7 @@ import sys
 
 
 #setup a global cookiejar
-myCookierJar = mechanize.CookieJar()
+myCookieJar = mechanize.CookieJar()
 
 
 def firstSubmit(url):
@@ -42,21 +42,34 @@ def firstSubmit(url):
     browser.set_cookiejar(myCookieJar)
     browser.open(url)
 
-    browser.form['username'] = username
-    browser.form['password'] = password
+    browser.select_form(nr=0)
+    
+
+    for field in browser.form.controls:
+        if 'user' in field.name:
+            browser.form[field.name] = username
+        if field.type == 'password':
+            browser.form[field.name] = password
+
 
     browser.submit()
 
 
-def secondSession(url):
+def secondSession(url, cookie):
     
     browser2 = mechanize.Browser()
+
     intruderCookieJar = mechanize.CookieJar()
     intruderCookieJar.set_cookie(cookie)
-
+   
     browser2.set_cookiejar(intruderCookieJar)
+    
+    browser2.open(url)
+    
+    response = browser2.response()
 
-
+    return response.read()
+ 
 def main():
     if len(sys.argv) !=2:
         sys.exit(-1)
@@ -64,4 +77,16 @@ def main():
 
     url = sys.argv[1]
 
+    firstSubmit(url)
 
+    for cookie in myCookieJar:
+        if cookie.name == 'PHPSESSID':
+            print cookie
+            break
+        
+    result = secondSession(url, cookie)
+    if 'Logged In' in result:
+        print '[+] The server is vulnerable'
+
+if __name__ =="__main__":
+    main()
