@@ -14,7 +14,7 @@ as data from the database.
 
 The attacks take place to a local Multillidae platform which is installed in the Metasploitable2
 
-Example Usage: ./a1.py http://192.168.1.10/mutillidae/index.php?page=user-info.php
+Example Usage: ./a2.py http://192.168.1.10/mutillidae/index.php?page=dns-lookup.php
 
 created by: Dr Ciphers
 '''
