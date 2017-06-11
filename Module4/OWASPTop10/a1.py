@@ -8,6 +8,7 @@ Threat Agents: Consider anyone who can send untrusted data to the system, includ
 users, internal users, and administrators.
 
 The attacks take place to a local Multillidae platform which is installed in the Metasploitable2
+Example Usage: ./a1.py http://192.168.1.10/mutillidae/index.php?page=user-info.php
 
 created by: Dr Ciphers
 '''
