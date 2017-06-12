@@ -81,7 +81,7 @@ def main():
 
     for cookie in myCookieJar:
         if cookie.name == 'PHPSESSID':
-            print cookie
+            print 'Using cookie %s' %cookie
             break
         
     result = secondSession(url, cookie)
