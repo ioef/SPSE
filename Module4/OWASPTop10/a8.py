@@ -58,9 +58,10 @@ def bruteforcer(url, wordlist):
             print '[+] Page %s is not protected!!!'%brute_url
 
 
-
+#base url
 url = 'http://192.168.1.10/mutillidae'
 
+#create a wordlist for bruteforce
 wlist = wordlist(url)
-
+#call the bruteforcer
 bruteforcer(url,wlist)
