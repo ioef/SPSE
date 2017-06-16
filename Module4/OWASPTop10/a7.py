@@ -39,8 +39,6 @@ if mo.group(0) in html_page:
     result = bs.find_all('p')
    
     for res in result:
-        print res.text
-    
-
+            print res.getText(separator=' ')
 
 
