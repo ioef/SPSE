@@ -23,12 +23,12 @@ browser.open(url)
 browser.select_form(nr=0)
 
 browser.form['username'] = sqlinjection
+browser.form['password'] = 'password'
 
 browser.submit()
 
 html_page = browser.response().read()
 
-#print html_page
 
 regex = re.compile(r'Results')
 
@@ -37,8 +37,10 @@ mo = regex.search(html_page)
 if mo.group(0) in html_page:
     bs = BeautifulSoup(html_page, 'lxml')
     result = bs.find_all('p')
-
-
+   
+    for res in result:
+        print res.text
+    
 
 
 
