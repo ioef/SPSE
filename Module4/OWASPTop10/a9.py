@@ -22,28 +22,34 @@ import mechanize
 import os
 from scapy.all import *
 
-
 def adminConnect(url):
-    br = mechanize.Browser()
-    response = br.open(url)
-    br.select_form(nr=0)
-    br.form['username'] = 'admin'
-    br.form['password'] = 'adminpass'
-    br.submit()
+    browser = mechanize.Browser()
     
+    #override the robots checking
+    browser.set_handle_robots(False)
+
+    response = browser.open(url)
+   
+    browser.select_form(nr=0)
+    browser.form['username'] = 'admin'
+    browser.form['password'] = 'adminpass'
+    browser.submit()
 
 
-#def credsniffer(pkt):
-#     if pkt.haslayer(TCP) and pkt.haslayer(Raw):
-#         if 'username' in str(pkt['Raw']):
-#      hexdump(pkt)
-
+def credsniffer(pkt):
+    if pkt.haslayer('Raw'): 
+        #convert packet payload to string
+        strPkt = str(pkt['Raw'])
+        
+        #start searching inside the payload
+        if 'POST' in strPkt:
+            if (('username' in strPkt) and ('password' in strPkt)):
+                print pkt.show()
 
 
 def main():
 
     url = 'http://192.168.1.10/mutillidae/index.php?page=login.php'
-
     forked_pid = os.fork()
 
     if forked_pid==0:
@@ -51,8 +57,7 @@ def main():
         adminConnect(url)
     else:
         print 'Proccess id of main process: %s'%os.getpid()
-        a=sniff(iface="eth1", count=20, filter="tcp port 80")
-        print a[0].show()
+        sniff(iface="eth1", store=0, count=200, filter="tcp port 80", prn=credsniffer)
 
 if __name__ =="__main__":
     main()
