@@ -161,7 +161,7 @@ def main():
    
     queue.put((url,1))
 
-    url_list = [] 
+    url_list = set() 
     max_depth = 5
 
     lock = threading.Lock()
