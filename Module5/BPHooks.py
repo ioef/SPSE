@@ -30,9 +30,11 @@ def main(args):
     #find strcpy address
     functiontoHook  = 'msvcrt.strcpy'
     functionAddress = imm.getAddress(functionToHook)
-
-    newHook = StrcpyBpHook()
     
+    #instantiating the BreakPoint Hook object
+    newHook = StrcpyBpHook()
+
+    #This actually creates a BreakPoint based on the provided function Name and Address
     newHook.add(functiontoHook, functionAddress) 
 
     imm.log('Hook for %s: 0x%08x added Succesfully!' %(functionToHook, functionAddress))
