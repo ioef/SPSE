@@ -10,12 +10,17 @@ topDict = {}
 
 class WorkerThread(threading.Thread):
     
-    def __init__(self, queue):
+    def __init__(self, queue, lock):
         threading.Thread.__init__(self)
         self.queue = queue
+        self.lock = lock
 
     def engine(self, site):
         try:
+            self.lock.acquire()
+            print "Checking robot.txt of site %s"%site
+            self.lock.release()
+            
             htmlRobots = requests.get(site, timeout=1)
 
             if htmlRobots.status_code == 200:
@@ -29,7 +34,8 @@ class WorkerThread(threading.Thread):
                         else: 
                             topDict[line] = 1 
         except:
-            print 'Trying next site'
+            print "[-] Problem with site %s"%site
+            print "[!!] Trying next site"
 
     def run(self):
        while True:
@@ -58,12 +64,13 @@ def main():
 
 
     queue = Queue.Queue()
+    lock = threading.Lock()
 
     for i in range(10):
         #print "Creating WorkerThread : %d" %i
 
         #feed the queue to the Workerthread in order the threads know on what they 'll be working on
-        worker = WorkerThread(queue)
+        worker = WorkerThread(queue, lock)
         worker.setDaemon(True)
         worker.start()
         #print "WorkerThread %d Created!"%i
