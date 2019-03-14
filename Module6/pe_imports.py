@@ -13,3 +13,4 @@ for item in pe.DIRECTORY_ENTRY_IMPORT:
         for import_fn in item.imports:
             print hex(import_fn.address), import_fn.name
         print '\n'
+        
