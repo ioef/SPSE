@@ -9,17 +9,18 @@ ip="192.168.0.1"
 
 class WorkerThread(threading.Thread):
 	
-	def __init__(self, queue, outqueue):
+    def __init__(self, queue, outqueue):
 		threading.Thread.__init__(self)
 		self.queue = queue
-                self.outqueue = outqueue
+        self.outqueue = outqueue
 
-        def scanner(self, ip, port):
+    def scannerSYN(self, ip, port):
+        response = sr1(IP(dst=ip)/TCP(dport=port, flags="S"), verbose=False, timeout=.2)
+        if response.has(TCP):
+            if response[TCP].flags == 18:
+                return "[+] PortNumber %s OPEN"%port
 
-            response = sr1(IP(dst=ip)/TCP(dport=port, flags="S"), verbose=False, timeout=.2)
-            if response:
-                if response[TCP].flags == 18:
-                    return "[+] PortNumber %s OPEN"%port
+
 
 	def run(self):
 	      #print "In WorkerThread"
